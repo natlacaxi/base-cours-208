@@ -83,7 +83,7 @@ body.light #em-overlay{background:rgba(200,210,255,.88);}
 
 /* ══ BOUTON THÈME — même style que AI ══ */
 #theme-toggle{
-  position:fixed;bottom:90px;left:24px;z-index:800;
+  position:fixed;bottom:24px;right:96px;z-index:800;
   width:56px;height:56px;border-radius:50%;
   background:#0a0010;
   border:none;cursor:pointer;
@@ -1029,17 +1029,21 @@ function initProgCanvas(){
   const canvas=document.getElementById('prog-canvas');
   const W=canvas.width=window.innerWidth,H=canvas.height=window.innerHeight;
   const ctx=canvas.getContext('2d');
+  // À 60fps, traverser W px en 2s = W/120 px/frame. Longueur ligne = 35% écran.
+  // distance totale = W + longueur = W*1.35 → speed = W*1.35/120
+  const spd=W*1.35/120;
   const LINES=[
-    {color:['#ff6ec7','#ff9d00'],y:H*.08,speed:7,thickness:3,wave:18,wfreq:.012,phase:0,ps:.06},
-    {color:['#00cfff','#7c3aed'],y:H*.22,speed:5,thickness:2,wave:28,wfreq:.009,phase:1.2,ps:.05},
-    {color:['#ffe600','#00ff88'],y:H*.38,speed:9,thickness:2.5,wave:14,wfreq:.015,phase:2.4,ps:.07},
-    {color:['#a855f7','#ec4899'],y:H*.52,speed:6,thickness:3.5,wave:22,wfreq:.011,phase:0.7,ps:.055},
-    {color:['#06b6d4','#f97316'],y:H*.65,speed:8,thickness:2,wave:16,wfreq:.013,phase:3.1,ps:.065},
-    {color:['#f87171','#a855f7'],y:H*.78,speed:5.5,thickness:3,wave:24,wfreq:.008,phase:1.8,ps:.05},
-    {color:['#00ff88','#00cfff'],y:H*.90,speed:7.5,thickness:2,wave:12,wfreq:.016,phase:0.4,ps:.07},
+    {color:['#ff6ec7','#ff9d00'],y:H*.08,speed:spd*1.0, thickness:3,  wave:18,wfreq:.012,phase:0,  ps:.06},
+    {color:['#00cfff','#7c3aed'],y:H*.22,speed:spd*0.95,thickness:2,  wave:28,wfreq:.009,phase:1.2,ps:.05},
+    {color:['#ffe600','#00ff88'],y:H*.36,speed:spd*1.05,thickness:2.5,wave:14,wfreq:.015,phase:2.4,ps:.07},
+    {color:['#a855f7','#ec4899'],y:H*.50,speed:spd*1.0, thickness:3.5,wave:22,wfreq:.011,phase:0.7,ps:.055},
+    {color:['#06b6d4','#f97316'],y:H*.64,speed:spd*0.98,thickness:2,  wave:16,wfreq:.013,phase:3.1,ps:.065},
+    {color:['#f87171','#a855f7'],y:H*.78,speed:spd*1.02,thickness:3,  wave:24,wfreq:.008,phase:1.8,ps:.05},
+    {color:['#00ff88','#00cfff'],y:H*.91,speed:spd*1.0, thickness:2,  wave:12,wfreq:.016,phase:0.4,ps:.07},
   ];
-  // chaque ligne part de gauche et traverse l'écran
-  const state=LINES.map(l=>({...l,x:-W*.4,t:0}));
+  // décalage de quelques frames (≈100ms) entre chaque ligne
+  const frameOffset=6; // ~100ms à 60fps
+  const state=LINES.map((l,i)=>({...l,x:-W*.35-(i*frameOffset*spd)}));
   function draw(){
     ctx.clearRect(0,0,W,H);
     const isLight=document.body.classList.contains('light');
@@ -1048,9 +1052,9 @@ function initProgCanvas(){
     state.forEach(s=>{
       s.x+=s.speed;
       s.phase+=s.ps;
-      if(s.x>W*1.4)s.x=-W*.4;
-      // longueur de la ligne = 40% de l'écran
-      const len=W*.42;
+      if(s.x>W)s.x=-W*.35;
+      // longueur de la ligne = 35% de l'écran
+      const len=W*.35;
       const grad=ctx.createLinearGradient(s.x,0,s.x+len,0);
       grad.addColorStop(0,'transparent');
       grad.addColorStop(.15,s.color[0]);
