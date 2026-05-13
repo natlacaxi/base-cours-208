@@ -239,8 +239,24 @@ main{max-width:1060px;margin:0 auto;padding:28px 18px 90px;position:relative;z-i
 .mc:active{transform:scale(.98) translateX(4px);}
 .mc-icon{width:46px;height:46px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.45rem;background:var(--mc-ib,rgba(99,102,241,.15));transition:transform .2s;}
 .mc:hover .mc-icon{transform:scale(1.1) rotate(-4deg);}
-.mc-body{flex:1;min-width:0;}
-.mc-name{font-size:.85rem;font-weight:700;color:#f0f6ff;line-height:1.2;transition:color .35s;}
+.mc-body{flex:1;min-width:0;position:relative;}
+.mc-name{
+  font-size:.85rem;font-weight:700;color:#f0f6ff;line-height:1.2;transition:color .35s,text-shadow .35s;
+  text-shadow:0 0 18px var(--mc-color,rgba(99,102,241,.5));
+  position:relative;display:inline-block;
+}
+/* Halo estompé derrière le nom */
+.mc-name::after{
+  content:'';
+  position:absolute;
+  inset:-6px -14px -6px -6px;
+  border-radius:10px;
+  background:radial-gradient(ellipse 100% 140% at 20% 50%, var(--mc-color,rgba(99,102,241,.3)) 0%, transparent 70%);
+  opacity:0.22;
+  filter:blur(6px);
+  z-index:-1;
+  pointer-events:none;
+}
 .mc-prof{font-size:.6rem;color:#3a5570;font-family:'JetBrains Mono',monospace;margin-top:3px;transition:color .35s;}
 .mc-arr{width:30px;height:30px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.85rem;background:var(--mc-ib,rgba(99,102,241,.1));color:var(--mc-color,var(--acc));transition:all .2s;}
 .mc:hover .mc-arr{background:var(--mc-color,var(--acc));color:#fff;transform:translateX(3px);}
@@ -574,6 +590,7 @@ body.light .padlet-btn:hover{background:rgba(6,182,212,.14);}
 
 <div id="particles-bg"></div>
 <canvas id="bg-lines-canvas" style="position:fixed;inset:0;z-index:0;pointer-events:none;"></canvas>
+<canvas id="touch-canvas" style="position:fixed;inset:0;z-index:999;pointer-events:none;"></canvas>
 
 <!-- ★ BOUTON THÈME -->
 <button id="theme-toggle" onclick="toggleTheme()" title="Basculer clair/sombre"><span class="theme-label">☀️</span></button>
@@ -722,7 +739,10 @@ body.light .padlet-btn:hover{background:rgba(6,182,212,.14);}
 
       <div class="mc-card-wrap" id="wrap-fr">
         <div class="mc" style="--mc-color:#ef4444;--mc-border:rgba(239,68,68,.3);--mc-glow:rgba(239,68,68,.18)" data-url="https://natlacaxi.github.io/francais-cours-208/" data-title="Français" data-prof="Mme Occelli E." data-info="" data-grad="linear-gradient(135deg,#ef4444,#f97316)" data-shad="rgba(239,68,68,.4)" data-id="fr" onclick="openMo(this)">
-          <div class="mc-icon">📖</div><div class="mc-body"><div class="mc-name">Français</div><div class="mc-prof">Mme Occelli E.</div></div><div class="mc-arr">›</div>
+          <div class="mc-icon">📖</div><div class="mc-body"><div class="mc-name">Français <em>Mise à jour peu probable</em>
+
+          
+          </div><div class="mc-prof">Mme Occelli E.</div></div><div class="mc-arr">›</div>
         </div>
         <div class="mc-social-bar"><button class="like-btn" onclick="toggleLike('fr',event)" id="like-fr"><span class="heart">♡</span><span id="lcount-fr">0</span></button><button class="comment-btn" onclick="toggleComments('fr',event)">💬 <span id="ccount-fr">0</span></button><span class="comment-count" id="clast-fr"></span></div>
         <div class="mc-comments" id="comments-fr"><div id="cmlist-fr"></div><div class="comment-input-row"><input class="comment-input" id="cminp-fr" placeholder="Ajouter un commentaire…" onkeydown="if(event.key==='Enter')sendComment('fr')"/><button class="comment-send" onclick="sendComment('fr')">↑</button></div></div>
@@ -730,7 +750,7 @@ body.light .padlet-btn:hover{background:rgba(6,182,212,.14);}
 
       <div class="mc-card-wrap" id="wrap-ang">
         <div class="mc" style="--mc-color:#06b6d4;--mc-border:rgba(6,182,212,.3);--mc-glow:rgba(6,182,212,.18)" data-url="https://natlacaxi.github.io/anglais-cours-208/" data-title="Anglais LV1" data-prof="Mme Malvisi Chaillan L." data-info="" data-grad="linear-gradient(135deg,#06b6d4,#3b82f6)" data-shad="rgba(6,182,212,.4)" data-id="ang" onclick="openMo(this)">
-          <div class="mc-icon">🇬🇧</div><div class="mc-body"><div class="mc-name">Anglais LV1</div><div class="mc-prof">Mme Malvisi Chaillan L.</div></div><div class="mc-arr">›</div>
+          <div class="mc-icon">🇬🇧</div><div class="mc-body"><div class="mc-name">Anglais LV1 <em>Accès padlet</em></div><div class="mc-prof">Mme Malvisi Chaillan L.</div></div><div class="mc-arr">›</div>
         </div>
         <div class="mc-social-bar"><button class="like-btn" onclick="toggleLike('ang',event)" id="like-ang"><span class="heart">♡</span><span id="lcount-ang">0</span></button><button class="comment-btn" onclick="toggleComments('ang',event)">💬 <span id="ccount-ang">0</span></button><span class="comment-count" id="clast-ang"></span></div>
         <div class="mc-comments" id="comments-ang"><div id="cmlist-ang"></div><div class="comment-input-row"><input class="comment-input" id="cminp-ang" placeholder="Ajouter un commentaire…" onkeydown="if(event.key==='Enter')sendComment('ang')"/><button class="comment-send" onclick="sendComment('ang')">↑</button></div></div>
@@ -738,7 +758,7 @@ body.light .padlet-btn:hover{background:rgba(6,182,212,.14);}
 
       <div class="mc-card-wrap" id="wrap-ru">
         <div class="mc" style="--mc-color:#3b82f6;--mc-border:rgba(59,130,246,.3);--mc-glow:rgba(59,130,246,.18)" data-url="https://natlacaxi.github.io/russe-cours-208/" data-title="Russe LV3" data-prof="Mme Candela E." data-info="" data-grad="linear-gradient(135deg,#3b82f6,#6366f1)" data-shad="rgba(59,130,246,.4)" data-id="ru" onclick="openMo(this)">
-          <div class="mc-icon">🇷🇺</div><div class="mc-body"><div class="mc-name">Russe LV3</div><div class="mc-prof">Mme Candela E.</div></div><div class="mc-arr">›</div>
+          <div class="mc-icon">🇷🇺</div><div class="mc-body"><div class="mc-name">Russe LV3 <em>Aucun cour</em></div><div class="mc-prof">Mme Candela E.</div></div><div class="mc-arr">›</div>
         </div>
         <div class="mc-social-bar"><button class="like-btn" onclick="toggleLike('ru',event)" id="like-ru"><span class="heart">♡</span><span id="lcount-ru">0</span></button><button class="comment-btn" onclick="toggleComments('ru',event)">💬 <span id="ccount-ru">0</span></button><span class="comment-count" id="clast-ru"></span></div>
         <div class="mc-comments" id="comments-ru"><div id="cmlist-ru"></div><div class="comment-input-row"><input class="comment-input" id="cminp-ru" placeholder="Ajouter un commentaire…" onkeydown="if(event.key==='Enter')sendComment('ru')"/><button class="comment-send" onclick="sendComment('ru')">↑</button></div></div>
@@ -746,7 +766,7 @@ body.light .padlet-btn:hover{background:rgba(6,182,212,.14);}
 
       <div class="mc-card-wrap" id="wrap-it">
         <div class="mc" style="--mc-color:#10b981;--mc-border:rgba(16,185,129,.3);--mc-glow:rgba(16,185,129,.18)" data-url="https://natlacaxi.github.io/italien-cours-208/" data-title="Italien LV2" data-prof="Mme Geneste S." data-info="" data-grad="linear-gradient(135deg,#10b981,#06b6d4)" data-shad="rgba(16,185,129,.4)" data-id="it" onclick="openMo(this)">
-          <div class="mc-icon">🇮🇹</div><div class="mc-body"><div class="mc-name">Italien LV2</div><div class="mc-prof">Mme Geneste S.</div></div><div class="mc-arr">›</div>
+          <div class="mc-icon">🇮🇹</div><div class="mc-body"><div class="mc-name">Italien LV2 <em>Aucun cour</em></div><div class="mc-prof">Mme Geneste S.</div></div><div class="mc-arr">›</div>
         </div>
         <div class="mc-social-bar"><button class="like-btn" onclick="toggleLike('it',event)" id="like-it"><span class="heart">♡</span><span id="lcount-it">0</span></button><button class="comment-btn" onclick="toggleComments('it',event)">💬 <span id="ccount-it">0</span></button><span class="comment-count" id="clast-it"></span></div>
         <div class="mc-comments" id="comments-it"><div id="cmlist-it"></div><div class="comment-input-row"><input class="comment-input" id="cminp-it" placeholder="Ajouter un commentaire…" onkeydown="if(event.key==='Enter')sendComment('it')"/><button class="comment-send" onclick="sendComment('it')">↑</button></div></div>
@@ -778,7 +798,7 @@ body.light .padlet-btn:hover{background:rgba(6,182,212,.14);}
 
       <div class="mc-card-wrap" id="wrap-se">
         <div class="mc" style="--mc-color:#ec4899;--mc-border:rgba(236,72,153,.3);--mc-glow:rgba(236,72,153,.18)" data-url="https://natlacaxi.github.io/ses-cours-208/" data-title="SES" data-prof="M. Scavino V." data-info="" data-grad="linear-gradient(135deg,#ec4899,#f43f5e)" data-shad="rgba(236,72,153,.4)" data-id="se" onclick="openMo(this)">
-          <div class="mc-icon">📊</div><div class="mc-body"><div class="mc-name">SES</div><div class="mc-prof">M. Scavino V.</div></div><div class="mc-arr">›</div>
+          <div class="mc-icon">📊</div><div class="mc-body"><div class="mc-name">SES <em>Aucune mise à jour</em></div><div class="mc-prof">M. Scavino V.</div></div><div class="mc-arr">›</div>
         </div>
         <div class="mc-social-bar"><button class="like-btn" onclick="toggleLike('se',event)" id="like-se"><span class="heart">♡</span><span id="lcount-se">0</span></button><button class="comment-btn" onclick="toggleComments('se',event)">💬 <span id="ccount-se">0</span></button><span class="comment-count" id="clast-se"></span></div>
         <div class="mc-comments" id="comments-se"><div id="cmlist-se"></div><div class="comment-input-row"><input class="comment-input" id="cminp-se" placeholder="Ajouter un commentaire…" onkeydown="if(event.key==='Enter')sendComment('se')"/><button class="comment-send" onclick="sendComment('se')">↑</button></div></div>
@@ -801,20 +821,14 @@ body.light .padlet-btn:hover{background:rgba(6,182,212,.14);}
       </div>
 
       <div class="mc-card-wrap" id="wrap-ep">
-        <div class="mc" style="--mc-color:#f97316;--mc-border:rgba(249,115,22,.3);--mc-glow:rgba(249,115,22,.18)" data-url="#" data-title="EPS" data-prof="M. Otheguy S." data-info="🤸 Acrosport en cours · 🏓 Bientôt ping-pong" data-grad="linear-gradient(135deg,#f97316,#ef4444)" data-shad="rgba(249,115,22,.4)" data-id="ep" onclick="openMo(this)">
+        <div class="mc" style="--mc-color:#f97316;--mc-border:rgba(249,115,22,.3);--mc-glow:rgba(249,115,22,.18)" data-url="#" data-title="EPS" data-prof="M. Otheguy S." data-info=" 🏓 Ping-pong" data-grad="linear-gradient(135deg,#f97316,#ef4444)" data-shad="rgba(249,115,22,.4)" data-id="ep" onclick="openMo(this)">
           <div class="mc-icon">🏃</div><div class="mc-body"><div class="mc-name">EPS</div><div class="mc-prof">M. Otheguy S.</div></div><div class="mc-arr">›</div>
         </div>
         <div class="mc-social-bar"><button class="like-btn" onclick="toggleLike('ep',event)" id="like-ep"><span class="heart">♡</span><span id="lcount-ep">0</span></button><button class="comment-btn" onclick="toggleComments('ep',event)">💬 <span id="ccount-ep">0</span></button><span class="comment-count" id="clast-ep"></span></div>
         <div class="mc-comments" id="comments-ep"><div id="cmlist-ep"></div><div class="comment-input-row"><input class="comment-input" id="cminp-ep" placeholder="Ajouter un commentaire…" onkeydown="if(event.key==='Enter')sendComment('ep')"/><button class="comment-send" onclick="sendComment('ep')">↑</button></div></div>
       </div>
 
-      <div class="mc-card-wrap" id="wrap-ap">
-        <div class="mc" style="--mc-color:#eab308;--mc-border:rgba(234,179,8,.3);--mc-glow:rgba(234,179,8,.18)" data-url="#" data-title="Acc. Personnalisé" data-prof="Baylet G. / Occelli E." data-info="📅 Se termine le 4 mai · Ensuite 2 semaines d'entretien avec le professeur principal et le professeur référent" data-grad="linear-gradient(135deg,#eab308,#f97316)" data-shad="rgba(234,179,8,.4)" data-id="ap" onclick="openMo(this)">
-          <div class="mc-icon">🎯</div><div class="mc-body"><div class="mc-name">Acc. Perso.</div><div class="mc-prof">Baylet G. / Occelli E.</div></div><div class="mc-arr">›</div>
-        </div>
-        <div class="mc-social-bar"><button class="like-btn" onclick="toggleLike('ap',event)" id="like-ap"><span class="heart">♡</span><span id="lcount-ap">0</span></button><button class="comment-btn" onclick="toggleComments('ap',event)">💬 <span id="ccount-ap">0</span></button><span class="comment-count" id="clast-ap"></span></div>
-        <div class="mc-comments" id="comments-ap"><div id="cmlist-ap"></div><div class="comment-input-row"><input class="comment-input" id="cminp-ap" placeholder="Ajouter un commentaire…" onkeydown="if(event.key==='Enter')sendComment('ap')"/><button class="comment-send" onclick="sendComment('ap')">↑</button></div></div>
-      </div>
+
 
     </div>
   </div>
@@ -840,15 +854,22 @@ body.light .padlet-btn:hover{background:rgba(6,182,212,.14);}
 <div class="edt-panel active" id="panel-A-1"><br><div class="edt-note">Semaine A · Groupe 1</div><br><br>
   <div class="edt-wrap">
     <div class="edt-hrow"><div class="edt-h"></div><div class="edt-h" id="lun-A-1">Lundi</div><div class="edt-h" id="mar-A-1">Mardi</div><div class="edt-h" id="mer-A-1">Mercredi</div><div class="edt-h" id="jeu-A-1">Jeudi</div><div class="edt-h" id="ven-A-1">Vendredi</div></div>
-    <div class="edt-row"><div class="edt-t">8h</div><div class="edt-c"><div class="cb mat-ap"><span class="cb-mat">Acc. Personnalisé</span><span class="cb-prof">Baylet G. Occelli E.</span><span class="cb-salle">---</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-it"><span class="cb-mat">Italien LV2</span><span class="cb-prof">Geneste S.</span><span class="cb-salle">104</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">108</span></div></div></div>
-    <div class="edt-row"><div class="edt-t">9h</div><div class="edt-c"><div class="cb mat-ap"><span class="cb-mat">Acc. Personnalisé</span><span class="cb-prof">Baylet G. Occelli E.</span><span class="cb-salle">---</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-sn"><span class="cb-mat">SNT</span><span class="cb-prof">Afflatet A.</span><span class="cb-salle">105</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div></div>
+    <div class="edt-row"><div class="edt-t">8h</div><div class="edt-c"><div class="cb mat-"><span class="cb-mat">
+    
+    </span><span class="cb-prof">
+      
+      
+    </span><span class="cb-salle"></span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c">
+
+<div class="cb mat-it"><span class="cb-mat">Italien LV2</span><span class="cb-prof">Geneste S.</span><span class="cb-salle">104</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">108</span></div></div></div>
+    <div class="edt-row"><div class="edt-t">9h</div><div class="edt-c"><div class="cb mat-"><span class="cb-mat"></span><span class="cb-prof"></span><span class="cb-salle"></span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-sn"><span class="cb-mat">SNT</span><span class="cb-prof">Afflatet A.</span><span class="cb-salle">105</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div></div>
     <div class="edt-row"><div class="edt-t">10h</div><div class="edt-c"><div class="cb mat-it"><span class="cb-mat">Italien LV2 / Espagnol LV2</span><span class="cb-prof">Geneste S. / Lopez S.</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-ep"><span class="cb-mat">EPS</span><span class="cb-prof">Otheguy S.</span><span class="cb-salle">Gymnase</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">106</span></div></div><div class="edt-c"><div class="cb mat-"></div></div></div>
     <div class="edt-row"><div class="edt-t">11h</div><div class="edt-c"><div class="cb mat-se"><span class="cb-mat">SES</span><span class="cb-prof">Scavino V.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-ma"><span class="cb-mat">Mathématiques</span><span class="cb-prof">Latrille-Seigneur L.</span><span class="cb-salle">211</span></div></div><div class="edt-c"><div class="cb mat-ep"><span class="cb-mat">EPS</span><span class="cb-prof">Otheguy S.</span><span class="cb-salle">Gymnase</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-ma"><span class="cb-mat">Mathématiques</span><span class="cb-prof">Latrille-Seigneur L.</span><span class="cb-salle">112</span></div></div></div>
     <div class="edt-row"><div class="edt-t">12h</div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">106</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-"></div></div></div>
-    <div class="edt-row"><div class="edt-t">13h</div><div class="edt-c"><div class="cb mat-ph"><span class="cb-mat">Physique-Chimie</span><span class="cb-prof">Lemonnier A.</span><span class="cb-salle">Physique</span></div></div><div class="edt-c"><div class="cb mat-sv"><span class="cb-mat">SVT</span><span class="cb-prof">Irisson E.</span><span class="cb-salle">Svt</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-se"><span class="cb-mat">SES</span><span class="cb-prof">Scavino V.</span><span class="cb-salle">---</span></div></div><div class="edt-c"><div class="cb mat-"></div></div></div>
+    <div class="edt-row"><div class="edt-t">13h</div><div class="edt-c"><div class="cb mat-ph"><span class="cb-mat">Physique-Chimie</span><span class="cb-prof">Lemonnier A.</span><span class="cb-salle">Physique</span></div></div><div class="edt-c"><div class="cb mat-sv"><span class="cb-mat">SVT</span><span class="cb-prof">Irisson E.</span><span class="cb-salle">Svt</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-se"><span class="cb-mat">SES</span><span class="cb-prof">Scavino V.</span><span class="cb-salle">208</span></div></div><div class="edt-c"><div class="cb mat-"></div></div></div>
     <div class="edt-row"><div class="edt-t">14h</div><div class="edt-c"><div class="cb mat-ma"><span class="cb-mat">Mathématiques</span><span class="cb-prof">Latrille-Seigneur L.</span><span class="cb-salle">113</span></div></div><div class="edt-c edt-c-half"><div class="cb-half mat-sv"><span class="cb-mat">SVT</span><span class="cb-prof">1h30</span></div><div class="cb-half mat-ph"><span class="cb-mat">Physique-Chimie</span><span class="cb-prof">1h30</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-ru"><span class="cb-mat">Russe LV3 Option</span><span class="cb-prof">Candela E.</span><span class="cb-salle">203</span></div></div><div class="edt-c"><div class="cb mat-"></div></div></div>
     <div class="edt-row"><div class="edt-t">15h</div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-ph"><span class="cb-mat">Physique-Chimie</span><span class="cb-prof">Lemonnier A.</span><span class="cb-salle">Physique</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-it"><span class="cb-mat">Italien LV2 / Espagnol LV2</span><span class="cb-prof">Geneste S. / Lopez S.</span></div></div><div class="edt-c"><div class="cb mat-"></div></div></div>
-    <div class="edt-row"><div class="edt-t">16h</div><div class="edt-c"><div class="cb mat-ru"><span class="cb-mat">Russe LV3 Option</span><span class="cb-prof">Candela E.</span><span class="cb-salle">013</span></div></div><div class="edt-c"><div class="cb mat-es"><span class="cb-mat">Espagnol LV2</span><span class="cb-prof">Lopez S.</span><span class="cb-salle">---</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-ma"><span class="cb-mat">Mathématiques</span><span class="cb-prof">Latrille-Seigneur S.</span><span class="cb-salle">113</span></div></div></div>
+    <div class="edt-row"><div class="edt-t">16h</div><div class="edt-c"><div class="cb mat-ru"><span class="cb-mat">Russe LV3 Option</span><span class="cb-prof">Candela E.</span><span class="cb-salle">013</span></div></div><div class="edt-c"><div class="cb mat-es"><span class="cb-mat">Espagnol LV2</span><span class="cb-prof">Lopez S.</span><span class="cb-salle">203</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-ma"><span class="cb-mat">Mathématiques</span><span class="cb-prof">Latrille-Seigneur S.</span><span class="cb-salle">113</span></div></div></div>
     <div class="edt-row"><div class="edt-t">17h</div><div class="edt-c"><div class="cb mat-ru"><span class="cb-mat">Russe LV3 Option</span><span class="cb-prof">Candela E.</span><span class="cb-salle">013</span></div></div><div class="edt-c"><div class="cb mat-vide"></div></div><div class="edt-c"><div class="cb mat-vide"></div></div><div class="edt-c"><div class="cb mat-vide"></div></div><div class="edt-c"><div class="cb mat-vide"></div></div></div>
   </div>
 </div>
@@ -856,8 +877,8 @@ body.light .padlet-btn:hover{background:rgba(6,182,212,.14);}
 <div class="edt-panel" id="panel-A-2"><br><div class="edt-note">Semaine A · Groupe 2</div><br><br>
   <div class="edt-wrap">
     <div class="edt-hrow"><div class="edt-h"></div><div class="edt-h" id="lun-A-2">Lundi</div><div class="edt-h" id="mar-A-2">Mardi</div><div class="edt-h" id="mer-A-2">Mercredi</div><div class="edt-h" id="jeu-A-2">Jeudi</div><div class="edt-h" id="ven-A-2">Vendredi</div></div>
-    <div class="edt-row"><div class="edt-t">8h</div><div class="edt-c"><div class="cb mat-ap"><span class="cb-mat">Acc. Personnalisé</span><span class="cb-prof">Baylet G. Occelli E.</span><span class="cb-salle">---</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-it"><span class="cb-mat">Italien LV2</span><span class="cb-prof">Geneste S.</span><span class="cb-salle">104</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">108</span></div></div></div>
-    <div class="edt-row"><div class="edt-t">9h</div><div class="edt-c"><div class="cb mat-ap"><span class="cb-mat">Acc. Personnalisé</span><span class="cb-prof">Baylet G. Occelli E.</span><span class="cb-salle">---</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-sn"><span class="cb-mat">SNT</span><span class="cb-prof">Afflatet Antoine</span><span class="cb-salle">105</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div></div>
+    <div class="edt-row"><div class="edt-t">8h</div><div class="edt-c"><div class="cb mat-"><span class="cb-mat"></span><span class="cb-prof"></span><span class="cb-salle"></span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-it"><span class="cb-mat">Italien LV2</span><span class="cb-prof">Geneste S.</span><span class="cb-salle">104</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">108</span></div></div></div>
+    <div class="edt-row"><div class="edt-t">9h</div><div class="edt-c"><div class="cb mat-"><span class="cb-mat"></span></span><span class="cb-prof"></span><span class="cb-salle"></span></span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-sn"><span class="cb-mat">SNT</span><span class="cb-prof">Afflatet Antoine</span><span class="cb-salle">105</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div></div>
     <div class="edt-row"><div class="edt-t">10h</div><div class="edt-c"><div class="cb mat-it"><span class="cb-mat">Italien LV2 / Espagnol LV2</span><span class="cb-prof">Geneste S. / Lopez S.</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-ep"><span class="cb-mat">EPS</span><span class="cb-prof">Otheguy S.</span><span class="cb-salle">Gymnase</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">106</span></div></div><div class="edt-c"><div class="cb mat-se"><span class="cb-mat">SES</span><span class="cb-prof">Scavino V.</span><span class="cb-salle">114</span></div></div></div>
     <div class="edt-row"><div class="edt-t">11h</div><div class="edt-c"><div class="cb mat-se"><span class="cb-mat">SES</span><span class="cb-prof">Scavino V.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-ma"><span class="cb-mat">Mathématiques</span><span class="cb-prof">Latrille-Seigneur L.</span><span class="cb-salle">211</span></div></div><div class="edt-c"><div class="cb mat-ep"><span class="cb-mat">EPS</span><span class="cb-prof">Otheguy S.</span><span class="cb-salle">Gymnase</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-ma"><span class="cb-mat">Mathématiques</span><span class="cb-prof">Latrille-Seigneur L.</span><span class="cb-salle">112</span></div></div></div>
     <div class="edt-row"><div class="edt-t">12h</div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">106</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-"></div></div></div>
@@ -872,8 +893,8 @@ body.light .padlet-btn:hover{background:rgba(6,182,212,.14);}
 <div class="edt-panel" id="panel-B-1"><br><div class="edt-note">Semaine B · Groupe 1</div><br><br>
   <div class="edt-wrap">
     <div class="edt-hrow"><div class="edt-h"></div><div class="edt-h" id="lun-B-1">Lundi</div><div class="edt-h" id="mar-B-1">Mardi</div><div class="edt-h" id="mer-B-1">Mercredi</div><div class="edt-h" id="jeu-B-1">Jeudi</div><div class="edt-h" id="ven-B-1">Vendredi</div></div>
-    <div class="edt-row"><div class="edt-t">8h</div><div class="edt-c"><div class="cb mat-ap"><span class="cb-mat">Acc. Personnalisé</span><span class="cb-prof">Baylet G. Occelli E.</span><span class="cb-salle">---</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">108</span></div></div></div>
-    <div class="edt-row"><div class="edt-t">9h</div><div class="edt-c"><div class="cb mat-ap"><span class="cb-mat">Acc. Personnalisé</span><span class="cb-prof">Baylet G. Occelli E.</span><span class="cb-salle">---</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-sn"><span class="cb-mat">SNT</span><span class="cb-prof">Afflatet A.</span><span class="cb-salle">---</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div></div>
+    <div class="edt-row"><div class="edt-t">8h</div><div class="edt-c"><div class="cb mat-"><span class="cb-mat"></span><span class="cb-prof"></span><span class="cb-salle"></span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">108</span></div></div></div>
+    <div class="edt-row"><div class="edt-t">9h</div><div class="edt-c"><div class="cb mat-"><span class="cb-mat"></span><span class="cb-prof"></span><span class="cb-salle"></span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-sn"><span class="cb-mat">SNT</span><span class="cb-prof">Afflatet A.</span><span class="cb-salle">214</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div></div>
     <div class="edt-row"><div class="edt-t">10h</div><div class="edt-c"><div class="cb mat-it"><span class="cb-mat">Italien LV2 / Espagnol LV2</span><span class="cb-prof">Geneste S. / Lopez S.</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-ep"><span class="cb-mat">EPS</span><span class="cb-prof">Otheguy S.</span><span class="cb-salle">Gymnase</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">106</span></div></div><div class="edt-c"><div class="cb mat-em"><span class="cb-mat">EMC</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">108</span></div></div></div>
     <div class="edt-row"><div class="edt-t">11h</div><div class="edt-c"><div class="cb mat-se"><span class="cb-mat">SES</span><span class="cb-prof">Scavino V.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-ma"><span class="cb-mat">Mathématiques</span><span class="cb-prof">Latrille-Seigneur L.</span><span class="cb-salle">211</span></div></div><div class="edt-c"><div class="cb mat-ep"><span class="cb-mat">EPS</span><span class="cb-prof">Otheguy S.</span><span class="cb-salle">Gymnase</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-ma"><span class="cb-mat">Mathématiques</span><span class="cb-prof">Latrille-Seigneur L.</span><span class="cb-salle">112</span></div></div></div>
     <div class="edt-row"><div class="edt-t">12h</div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">106</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-"></div></div></div>
@@ -888,8 +909,8 @@ body.light .padlet-btn:hover{background:rgba(6,182,212,.14);}
 <div class="edt-panel" id="panel-B-2"><br><div class="edt-note">Semaine B · Groupe 2</div><br><br>
   <div class="edt-wrap">
     <div class="edt-hrow"><div class="edt-h"></div><div class="edt-h" id="lun-B-2">Lundi</div><div class="edt-h" id="mar-B-2">Mardi</div><div class="edt-h" id="mer-B-2">Mercredi</div><div class="edt-h" id="jeu-B-2">Jeudi</div><div class="edt-h" id="ven-B-2">Vendredi</div></div>
-    <div class="edt-row"><div class="edt-t">8h</div><div class="edt-c"><div class="cb mat-ap"><span class="cb-mat">Acc. Personnalisé</span><span class="cb-prof">Baylet G. Occelli E.</span><span class="cb-salle">---</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">108</span></div></div></div>
-    <div class="edt-row"><div class="edt-t">9h</div><div class="edt-c"><div class="cb mat-ap"><span class="cb-mat">Acc. Personnalisé</span><span class="cb-prof">Baylet G. Occelli E.</span><span class="cb-salle">---</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div></div>
+    <div class="edt-row"><div class="edt-t">8h</div><div class="edt-c"><div class="cb mat-"><span class="cb-mat"></span></span><span class="cb-prof"></span><span class="cb-salle"></span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">108</span></div></div></div>
+    <div class="edt-row"><div class="edt-t">9h</div><div class="edt-c"><div class="cb mat-"><span class="cb-mat"></span><span class="cb-prof"></span><span class="cb-salle"></span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div></div>
     <div class="edt-row"><div class="edt-t">10h</div><div class="edt-c"><div class="cb mat-it"><span class="cb-mat">Italien LV2 / Espagnol LV2</span><span class="cb-prof">Geneste S. / Lopez S.</span></div></div><div class="edt-c"><div class="cb mat-ang"><span class="cb-mat">Anglais LV1</span><span class="cb-prof">Malvisi-Chaillan L.</span><span class="cb-salle">103</span></div></div><div class="edt-c"><div class="cb mat-ep"><span class="cb-mat">EPS</span><span class="cb-prof">Otheguy S.</span><span class="cb-salle">Gymnase</span></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">106</span></div></div><div class="edt-c"><div class="cb mat-em"><span class="cb-mat">EMC</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">108</span></div></div></div>
     <div class="edt-row"><div class="edt-t">11h</div><div class="edt-c"><div class="cb mat-se"><span class="cb-mat">SES</span><span class="cb-prof">Scavino V.</span><span class="cb-salle">210</span></div></div><div class="edt-c"><div class="cb mat-ma"><span class="cb-mat">Mathématiques</span><span class="cb-prof">Latrille-Seigneur L.</span><span class="cb-salle">211</span></div></div><div class="edt-c"><div class="cb mat-ep"><span class="cb-mat">EPS</span><span class="cb-prof">Otheguy S.</span><span class="cb-salle">Gymnase</span></div></div><div class="edt-c"><div class="cb mat-sn"><span class="cb-mat">SNT</span><span class="cb-prof">Afflatet A.</span><span class="cb-salle">215</span></div></div><div class="edt-c"><div class="cb mat-ma"><span class="cb-mat">Mathématiques</span><span class="cb-prof">Latrille-Seigneur L.</span><span class="cb-salle">112</span></div></div></div>
     <div class="edt-row"><div class="edt-t">12h</div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-"></div></div><div class="edt-c"><div class="cb mat-hi"><span class="cb-mat">Histoire-Géographie</span><span class="cb-prof">Rolando P.</span><span class="cb-salle">106</span></div></div><div class="edt-c"><div class="cb mat-fr"><span class="cb-mat">Français</span><span class="cb-prof">Occelli E.</span><span class="cb-salle">209</span></div></div><div class="edt-c"><div class="cb mat-"></div></div></div>
@@ -1107,38 +1128,38 @@ function initBgLines(){
   const W=canvas.width=window.innerWidth,H=canvas.height=window.innerHeight;
   const ctx=canvas.getContext('2d');
   const PALETTE=['#6366f1','#a855f7','#ec4899','#06b6d4','#22c55e','#f97316','#ff6ec7','#00cfff'];
-  const lines=Array.from({length:12},(_,i)=>{
-    const dir=i%3;
-    return{
-      dir,
-      pos:Math.random()*(dir===0?H:W),
-      speed:(Math.random()*1.2+0.4)*(Math.random()<.5?1:-1),
-      amplitude:Math.random()*30+8,
-      freq:Math.random()*.015+.005,
-      phase:Math.random()*Math.PI*2,
-      phaseSpeed:Math.random()*.025+.008,
-      color:PALETTE[i%PALETTE.length],
-      width:Math.random()*1.2+0.3,
-      alpha:Math.random()*.18+.06,
-    };
-  });
+  const lines=Array.from({length:10},(_,i)=>({
+    pos:Math.random()*H,
+    speed:(Math.random()*0.6+0.25)*(Math.random()<.5?1:-1),
+    amplitude:Math.random()*35+12,
+    freq:Math.random()*.013+.005,
+    phase:Math.random()*Math.PI*2,
+    phaseSpeed:Math.random()*.02+.007,
+    color:PALETTE[i%PALETTE.length],
+    width:Math.random()*1.0+0.6,
+    alpha:Math.random()*.32+.18,
+    glow:Math.random()*8+4,
+  }));
   function drawBg(){
     ctx.clearRect(0,0,W,H);
     lines.forEach(w=>{
       w.phase+=w.phaseSpeed;
-      if(w.dir===0){w.pos+=w.speed;if(w.pos<-100)w.pos=H+100;if(w.pos>H+100)w.pos=-100;}
-      else if(w.dir===1){w.pos+=w.speed;if(w.pos<-100)w.pos=W+100;if(w.pos>W+100)w.pos=-100;}
-      else{w.pos+=w.speed;if(w.pos<-H)w.pos=H*2;if(w.pos>H*2)w.pos=-H;}
-      ctx.save();ctx.globalAlpha=w.alpha;ctx.strokeStyle=w.color;ctx.lineWidth=w.width;
+      w.pos+=w.speed;
+      if(w.pos<-80)w.pos=H+80;
+      if(w.pos>H+80)w.pos=-80;
+      ctx.save();
+      ctx.globalAlpha=w.alpha;
+      ctx.strokeStyle=w.color;
+      ctx.lineWidth=w.width;
+      ctx.shadowColor=w.color;
+      ctx.shadowBlur=w.glow;
       ctx.beginPath();
-      if(w.dir===0){
-        for(let x=0;x<=W;x+=6){const y=w.pos+Math.sin(x*w.freq+w.phase)*w.amplitude;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-      } else if(w.dir===1){
-        for(let y=0;y<=H;y+=6){const x=w.pos+Math.sin(y*w.freq+w.phase)*w.amplitude;y===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-      } else {
-        for(let t=0;t<=W+H;t+=6){const x=t;const y=w.pos+t+Math.sin(t*w.freq+w.phase)*w.amplitude;ctx.lineTo(x,y);}
+      for(let x=0;x<=W;x+=5){
+        const y=w.pos+Math.sin(x*w.freq+w.phase)*w.amplitude;
+        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
       }
-      ctx.stroke();ctx.restore();
+      ctx.stroke();
+      ctx.restore();
     });
     requestAnimationFrame(drawBg);
   }
@@ -1191,7 +1212,107 @@ function saveEdt(){const d={};document.querySelectorAll('.edt-c[id]').forEach(c=
 function loadEdt(){try{const r=localStorage.getItem('edt208');if(!r)return;const d=JSON.parse(r);Object.entries(d).forEach(([id,h])=>{const c=document.getElementById(id);if(c)c.innerHTML=h;});}catch(e){}}
 
 // ════ BOOT ════
-function boot(){tick();setInterval(tick,60000);initDays();updateHolidayBanner();loadEdt();loadSocial();initParticles();const s=getS(new Date());document.getElementById('tA').className='edt-tab'+(s==='A'?' a-a':'');document.getElementById('tB').className='edt-tab'+(s==='B'?' a-b':'');}
+function boot(){tick();setInterval(tick,60000);initDays();updateHolidayBanner();loadEdt();loadSocial();initParticles();initTouchTrails();const s=getS(new Date());document.getElementById('tA').className='edt-tab'+(s==='A'?' a-a':'');document.getElementById('tB').className='edt-tab'+(s==='B'?' a-b':'');}
+
+// ════ ★ VAGUES ARC-EN-CIEL AU TOUCHER ★ ════
+function initTouchTrails(){
+  const canvas=document.getElementById('touch-canvas');
+  if(!canvas)return;
+  let W=canvas.width=window.innerWidth,H=canvas.height=window.innerHeight;
+  window.addEventListener('resize',()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;});
+  const ctx=canvas.getContext('2d');
+
+  // Chaque "trail" stocke les points du doigt + un temps global pour l'ondulation
+  const trails=[];
+  let hueBase=0;
+  let frame=0;
+
+  function addPoint(id,x,y){
+    let t=trails.find(t=>t.id===id);
+    if(!t){t={id,pts:[],hue:hueBase,ending:false};hueBase=(hueBase+55)%360;trails.push(t);}
+    t.pts.push({x,y});
+    if(t.pts.length>80)t.pts.shift();
+  }
+  function endTrail(id){const t=trails.find(t=>t.id===id);if(t)t.ending=true;}
+
+  window.addEventListener('touchstart',e=>{[...e.changedTouches].forEach(t=>addPoint(t.identifier,t.clientX,t.clientY));},{passive:true});
+  window.addEventListener('touchmove',e=>{[...e.changedTouches].forEach(t=>addPoint(t.identifier,t.clientX,t.clientY));},{passive:true});
+  window.addEventListener('touchend',e=>{[...e.changedTouches].forEach(t=>endTrail(t.identifier));},{passive:true});
+  let mouseDown=false,mouseId=99999;
+  window.addEventListener('mousedown',e=>{mouseDown=true;addPoint(mouseId,e.clientX,e.clientY);});
+  window.addEventListener('mousemove',e=>{if(mouseDown)addPoint(mouseId,e.clientX,e.clientY);});
+  window.addEventListener('mouseup',()=>{mouseDown=false;endTrail(mouseId);});
+
+  function drawLoop(){
+    ctx.clearRect(0,0,W,H);
+    frame++;
+
+    for(let ti=trails.length-1;ti>=0;ti--){
+      const trail=trails[ti];
+      const pts=trail.pts;
+      if(pts.length<2){if(trail.ending)trails.splice(ti,1);continue;}
+
+      // Dessin de la vague ondulée : on perturbe chaque point perpendiculairement
+      const waveAmp=5;         // amplitude de l'ondulation en pixels
+      const waveFreq=0.18;     // fréquence spatiale (par point)
+      const waveSpeed=0.22;    // vitesse temporelle
+
+      ctx.save();
+      ctx.lineCap='round';
+      ctx.lineJoin='round';
+
+      // On trace 3 passes légèrement décalées pour un effet halo doux
+      for(let pass=0;pass<3;pass++){
+        const passOffset=(pass-1)*2.5;
+        const passAlpha=[0.25,0.7,0.25][pass];
+        const passWidth=[2.5,1.2,2.5][pass];
+
+        ctx.beginPath();
+        for(let i=0;i<pts.length;i++){
+          const p=pts[i];
+          const progress=i/(pts.length-1);
+          // direction perpendiculaire au chemin
+          let nx=0,ny=1;
+          if(i<pts.length-1){
+            const dx=pts[i+1].x-p.x,dy=pts[i+1].y-p.y;
+            const len=Math.sqrt(dx*dx+dy*dy)||1;
+            nx=-dy/len;ny=dx/len;
+          }
+          // ondulation perpendiculaire animée
+          const wave=Math.sin(i*waveFreq+frame*waveSpeed)*waveAmp+passOffset;
+          const px=p.x+nx*wave;
+          const py=p.y+ny*wave;
+          i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+        }
+
+        // dégradé arc-en-ciel sur toute la longueur
+        if(pts.length>=2){
+          const p0=pts[0],pN=pts[pts.length-1];
+          const grad=ctx.createLinearGradient(p0.x,p0.y,pN.x,pN.y);
+          const fadeAlpha=trail.ending?passAlpha*0.5:passAlpha;
+          for(let s=0;s<=1;s+=0.14){
+            const hue=(trail.hue+s*160)%360;
+            grad.addColorStop(s,`hsla(${hue},100%,68%,${fadeAlpha*(0.1+s*0.9)})`);
+          }
+          grad.addColorStop(1,`hsla(${(trail.hue+160)%360},100%,72%,${fadeAlpha})`);
+          ctx.strokeStyle=grad;
+        }
+        ctx.lineWidth=passWidth;
+        ctx.shadowColor=`hsl(${trail.hue},100%,65%)`;
+        ctx.shadowBlur=pass===1?10:3;
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      if(trail.ending){
+        pts.shift();
+        if(pts.length===0)trails.splice(ti,1);
+      }
+    }
+    requestAnimationFrame(drawLoop);
+  }
+  drawLoop();
+}
 </script>
 </body>
 </html>
